@@ -1,0 +1,17 @@
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+allprojects{
+	apply plugin: 'java'
+}
+
+subprojects{
+	sourceCompatibility = 17
+	targetCompatibility = 17
+
+	tasks.withType(JavaCompile){
+		options.encoding = 'UTF-8'
+	}
+}
