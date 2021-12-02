@@ -11,7 +11,7 @@ ext {
         mapStructProcessor : '1.4.2.Final',
         postgresql : '42.3.1',
         hikariCP : '5.0.0',
-        hibernateCore : '5.3.24.Final',
+        hibernateCore : '5.5.4.Final',
         openCsv : '5.5.2',
         junit : '4.3.12',
         springCloudVersion : '2021.0.0-RC1',

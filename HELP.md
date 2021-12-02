@@ -33,7 +33,50 @@ These additional references should also help you:
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 * [Declarative REST calls with Spring Cloud OpenFeign sample](https://github.com/spring-cloud-samples/feign-eureka)
 
-### How to RUN Shell into CockRoach Node
+## DATABASE ADMINISTRATION
+
+* How to RUN Shell into CockRoach Node
 ```
 docker exec -it roach1 ./cockroach sql --insecure
 ```
+* Crate Database
+```
+create database fapidb;
+```
+* Switch Database
+```
+use fapidb;
+```
+
+
+* Crate User
+```
+create user fapidbuser;
+```
+* Grant privileges to the user 
+```
+grant all on database fapidb to fapidbuser
+```
+* Grant privileges on databases
+
+```
+  CREATE USER fapidbuser WITH PASSWORD roach;
+  ```
+```
+CREATE USER fapidbuser WITH PASSWORD roach;
+```
+```
+GRANT ALL ON DATABASE fapidb TO fapidbuser;
+```
+```
+SHOW GRANTS ON DATABASE fapidb;
+```
+* Grant privileges on specific tables in a database
+```
+GRANT SELECT ON TABLE fapidb.public.* TO fapidbuser;
+GRANT ALL ON TABLE fapidb.public.* TO fapidbuser;
+```
+#### Admin UI:
+You should be able to access the admin UI via port 9090. (Actually I have mapped the port 9090 with the container port 8080)
+We can see 3 nodes in our cluster
+You can connect your GUI DB client with the CockroachDB. Do note that the DB server port is 26757 (not 5432 as postgres DB)
