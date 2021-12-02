@@ -33,3 +33,7 @@ These additional references should also help you:
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 * [Declarative REST calls with Spring Cloud OpenFeign sample](https://github.com/spring-cloud-samples/feign-eureka)
 
+### How to RUN Shell into CockRoach Node
+```
+docker exec -it roach1 ./cockroach sql --insecure
+```
