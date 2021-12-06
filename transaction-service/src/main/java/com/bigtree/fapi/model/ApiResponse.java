@@ -8,8 +8,6 @@ import lombok.Data;
 public class ApiResponse {
     
     String endpoint;
-    String method;
-    String[] headers;
     String message;
     
 }

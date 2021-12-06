@@ -49,6 +49,7 @@ dependencies {
 	implementation libs.hibernateCore
 	implementation libs.openCsv
 	implementation libs.hibernateTypes
+	implementation libs.hibernateJpaModelGen
 	developmentOnly libs.springBootDevTools
 	runtimeOnly libs.h2database
 	annotationProcessor libs.lombok

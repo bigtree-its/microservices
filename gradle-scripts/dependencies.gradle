@@ -17,6 +17,7 @@ ext {
         springCloudVersion : '2021.0.0-RC1',
         hibernateTypes : '2.14.0',
         h2database : '2.0.202',
+        hibernateJpaModelGen : '5.3.24.Final',
     ]
     libs = [
         junit : "junit:junit:$versions.junit",
@@ -40,6 +41,7 @@ ext {
         hikariCP : "com.zaxxer:HikariCP:$versions.hikariCP",
         hibernateCore : "org.hibernate:hibernate-core:$versions.hibernateCore",
         hibernateTypes : "com.vladmihalcea:hibernate-types-52:$versions.hibernateTypes",
+        hibernateJpaModelGen : "org.hibernate:hibernate-jpamodelgen:$versions.hibernateJpaModelGen",
         h2database : "com.h2database:h2:$versions.h2database",
     ]
 }

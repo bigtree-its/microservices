@@ -2,6 +2,13 @@ package com.bigtree.fapi.helper;
 
 public class ApiConstants {
 
+    public static final String FAPI_DATE_FORMAT = "dd/MMM/yyyy";
+
+    public static class TransactionType {
+        public static final String DEBIT = "Debit";
+        public static final String Credit = "Credit";
+    }
+
     public static class Banks{
         public static final String HSBC="HSBC";
         public static final String SANTANDER="Santander";

@@ -2,20 +2,29 @@ package com.bigtree.fapi.service;
 
 import com.bigtree.fapi.entity.Account;
 import com.bigtree.fapi.entity.Transaction;
-import com.bigtree.fapi.entity.TransactionType;
 import com.bigtree.fapi.error.ApiException;
 import com.bigtree.fapi.helper.ApiConstants;
 import com.bigtree.fapi.helper.CsvHelper;
 import com.bigtree.fapi.model.ITransactionCsv;
+import com.bigtree.fapi.model.TransactionQuery;
+import com.bigtree.fapi.model.TransactionResponse;
+import com.bigtree.fapi.model.TransactionSummary;
+import com.bigtree.fapi.repository.TransactionSpecRepository;
+import com.bigtree.fapi.repository.TransactionSpecification;
 import com.bigtree.fapi.repository.TransactionsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -26,7 +35,16 @@ public class TransactionsService {
     TransactionsRepository repository;
 
     @Autowired
+    TransactionSpecRepository transactionSpecRepository;
+
+    @Autowired
+    private TransactionSpecification transactionSpecification;
+
+    @Autowired
     CsvHelper csvHelper;
+
+    @Autowired
+    TransactionSpecification transactionDAO;
 
     public int uploadBulk(MultipartFile file, Account account) {
         List<? extends ITransactionCsv> transactions = csvHelper.parseCsvFile(account, file);
@@ -53,6 +71,7 @@ public class TransactionsService {
             log.error("Transaction already exist");
             throw new ApiException(HttpStatus.BAD_REQUEST, "Transaction already exist");
         }
+        toSave.setAccountId(account.getId());
         Transaction saved = repository.save(toSave);
         if (saved != null && saved.getId() != null) {
             log.info("Transaction created {}", saved.getId());
@@ -84,9 +103,39 @@ public class TransactionsService {
         return repository.findAllDebits(accountId);
     }
 
-    public List<Transaction> getAllTransactions(UUID accountId) {
-        log.info("Fetching all Transactions");
-        return repository.getTransactionsByAccountId(accountId);
+    public TransactionResponse getAllTransactions(TransactionQuery request) {
+        log.info("Fetching transactions {}", request);
+        List<Transaction> list = null;
+        Page<Transaction> pages = null;
+        if (request.getPageNumber() == null) {
+            pages = new PageImpl<>(transactionSpecRepository.findAll(transactionSpecification.findTransactions(request)));
+        } else {
+            if (request.getPageSize() == null) {
+                request.setPageSize(10);
+            }
+            Pageable paging = PageRequest.of(request.getPageNumber() - 1, request.getPageSize());
+            pages = transactionSpecRepository.findAll(transactionSpecification.findTransactions(request), paging);
+        }
+        if (pages != null && pages.getContent() != null) {
+            list = pages.getContent();
+            if (!CollectionUtils.isEmpty(list)) {
+                TransactionResponse transactionResponse = TransactionResponse.builder()
+                        .totalPages(pages.getTotalPages())
+                        .totalCount(pages.getTotalElements())
+                        .pageNo(pages.getNumber() + 1)
+                        .transactions(pages.getContent())
+                        .build();
+                for (Transaction transaction : list) {
+                    if ( transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.Credit)){
+                       transactionResponse.addCredit(transaction.getDescription(), transaction.getAmount());
+                    }else if ( transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.DEBIT)){
+                        transactionResponse.addDebit(transaction.getDescription(), transaction.getAmount());
+                    }
+                }
+                return transactionResponse;
+            }
+        }
+        return null;
     }
 
     public List<Transaction> getAllCredits(UUID accountId) {
@@ -113,5 +162,12 @@ public class TransactionsService {
             log.error("Transaction not found");
             return null;
         }
+    }
+
+    public List<Transaction> getAllTransactions(UUID accountId, String transactionType) {
+        if (transactionType.equalsIgnoreCase(ApiConstants.TransactionType.DEBIT)) {
+            return getAllDebitTransactions(accountId);
+        }
+        return getAllCredits(accountId);
     }
 }

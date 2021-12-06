@@ -26,7 +26,7 @@ public class AccountsController {
     @GetMapping("/get")
     public ResponseEntity<ApiResponse> get(){
         log.info("Received request to get response");
-        return ResponseEntity.ok().body(ApiResponse.builder().endpoint("/get").method(HttpMethod.GET.name()).build());
+        return ResponseEntity.ok().body(ApiResponse.builder().endpoint("/get").build());
     }
 
     @GetMapping("/accounts")
