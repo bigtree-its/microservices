@@ -9,8 +9,11 @@ import java.util.UUID;
 
 public interface AccountsRepository extends JpaRepository<Account, UUID> {
 
-    @Query("SELECT a from Account a where a.id = :id")
-    Account getAccount(@Param("id") UUID accountId);
+    @Query("SELECT a from Account a where a.id = :accountId")
+    Account getAccount(@Param("accountId") UUID accountId);
+
+    @Query("SELECT a from Account a where a.companyId = :companyId")
+    Account getAccountByCompanyId(@Param("companyId") UUID companyId);
 
     @Query("SELECT a from Account a where a.sortCode = :sortCode AND accountNumber = :accountNumber")
     Account findByAccountNumberAndSortCode(@Param("sortCode") String sortCode, @Param("accountNumber") String accountNumber);

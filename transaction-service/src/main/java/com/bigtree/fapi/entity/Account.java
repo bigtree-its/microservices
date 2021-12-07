@@ -21,6 +21,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    private UUID companyId;
     private String accountName;
     private String sortCode;
     private String accountNumber;
