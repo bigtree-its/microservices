@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Component
 @Slf4j
@@ -36,7 +37,7 @@ public class CsvHelper {
     public List<? extends ITransactionCsv> parseCsvFile(Account account, MultipartFile file) {
 
         List<? extends ITransactionCsv> transactions;
-        switch (account.getBank()){
+        switch (account.getBank()) {
             case ApiConstants.Banks.HSBC:
                 transactions = new CsvToBeanMapper<HsbcBusinessCsv>().map(file, HsbcBusinessCsv.class);
                 break;
@@ -49,24 +50,70 @@ public class CsvHelper {
         return transactions;
     }
 
-    private BigDecimal getAmount(String value){
-        if (StringUtils.isEmpty(value)){
+    private BigDecimal getAmount(String value) {
+        if (StringUtils.isEmpty(value)) {
             return BigDecimal.ZERO;
         }
         return new BigDecimal(value);
     }
 
     public Transaction toTransaction(ITransactionCsv transaction, UUID id) {
-        Transaction entity =  Transaction.builder()
+        Transaction entity = Transaction.builder()
                 .accountId(id)
                 .date(LocalDate.parse(transaction.getDate(), formatter))
                 .type(transaction.getType())
                 .code(transaction.getCode())
                 .amount(transaction.getAmount())
+                .balance(transaction.getBalance())
                 .description(transaction.getDescription())
                 .build();
+        setCategory(transaction, entity);
+
         log.info("Transaction Entity: {}", entity);
         return entity;
+    }
+
+    private void setCategory(ITransactionCsv transaction, Transaction entity) {
+        boolean accounting = Pattern.compile(Pattern.quote("ACCOUNTING"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean charges = Pattern.compile(Pattern.quote("CHARGES"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean pension = Pattern.compile(Pattern.quote("NEST"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean salary = Pattern.compile(Pattern.quote("SALARY"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean vat = Pattern.compile(Pattern.quote("VAT"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean paye = Pattern.compile(Pattern.quote("PAYE/NIC"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean dividend = Pattern.compile(Pattern.quote("DIVIDEND"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean hmrcJrsGrant = Pattern.compile(Pattern.quote("HMRC JRS GRANT"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean corpTax = Pattern.compile(Pattern.quote("CORP TAX"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean self = Pattern.compile(Pattern.quote("SELF"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean insurance = Pattern.compile(Pattern.quote("HISCOX"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean expense = Pattern.compile(Pattern.quote("Expense"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        boolean loan = Pattern.compile(Pattern.quote("LOAN"), Pattern.CASE_INSENSITIVE).matcher(transaction.getDescription()).find();
+        if (accounting) {
+            entity.setCategory("ACCOUNTING");
+        } else if (charges) {
+            entity.setCategory("CHARGES");
+        } else if (pension) {
+            entity.setCategory("PENSION");
+        } else if (salary) {
+            entity.setCategory("SALARY");
+        } else if (vat) {
+            entity.setCategory("VAT");
+        } else if (paye) {
+            entity.setCategory("PAYE/NIC");
+        } else if (dividend) {
+            entity.setCategory("DIVIDEND");
+        } else if (hmrcJrsGrant) {
+            entity.setCategory("HMRC JRS GRANT");
+        } else if (corpTax) {
+            entity.setCategory("CORP TAX");
+        } else if (self) {
+            entity.setCategory("SELF ASSESSMENT");
+        } else if (insurance) {
+            entity.setCategory("INSURANCE");
+        } else if (expense) {
+            entity.setCategory("EXPENSE");
+        } else if (loan) {
+            entity.setCategory("LOAN");
+        }
     }
 
 }

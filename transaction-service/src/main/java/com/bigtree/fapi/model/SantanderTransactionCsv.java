@@ -17,6 +17,8 @@ public class SantanderTransactionCsv implements ITransactionCsv{
     String code;
     @CsvBindByName(column = "Debit/Credit")
     BigDecimal amount;
+    @CsvBindByName(column = "Balance")
+    BigDecimal balance;
     @CsvBindByName(column = "Merchant/Description")
     String description;
 

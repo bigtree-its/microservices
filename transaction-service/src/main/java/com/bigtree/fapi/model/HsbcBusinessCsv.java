@@ -19,6 +19,8 @@ public class HsbcBusinessCsv implements ITransactionCsv {
     BigDecimal paidIn;
     @CsvBindByName(column = "Paid Out")
     BigDecimal paidOut;
+    @CsvBindByName(column = "Balance")
+    BigDecimal balance;
     @CsvBindByName
     String description;
 

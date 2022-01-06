@@ -36,9 +36,14 @@ public class AccountsService {
         return save;
     }
 
-    public List<Account> getAllAccounts(){
-        log.info("Fetching all accounts");
-        return repository.findAll();
+    public List<Account> getBusinessAccounts(UUID companyId){
+        log.info("Fetching business accounts");
+        return repository.getBusinessAccounts(companyId);
+    }
+
+    public List<Account> getPersonalAccounts(UUID userId){
+        log.info("Fetching business accounts");
+        return repository.getPersonalAccounts(userId);
     }
 
     public Account updateAccount(UUID id, Account account) {
@@ -47,14 +52,17 @@ public class AccountsService {
         if ( optional.isPresent()){
            log.info("Account already exist");
             Account exist = optional.get();
-            if (StringUtils.hasLength(account.getAccountName())){
-                exist.setAccountName(account.getAccountName());
+            if (account.getCompanyId() != null){
+                exist.setCompanyId(account.getCompanyId());
             }
-            if (StringUtils.hasLength(account.getBank())){
-                exist.setBank(account.getBank());
+            if (account.getUserId() != null){
+                exist.setUserId(account.getUserId());
             }
-            if (StringUtils.hasLength(account.getSecurityNumber())){
-                exist.setSecurityNumber(account.getSecurityNumber());
+            if (StringUtils.hasLength(account.getType())){
+                exist.setType(account.getType());
+            }
+            if (StringUtils.hasLength(account.getSubType())){
+                exist.setSubType(account.getSubType());
             }
             if (StringUtils.hasLength(account.getSortCode())){
                 exist.setSortCode(account.getSortCode());
@@ -62,20 +70,17 @@ public class AccountsService {
             if (StringUtils.hasLength(account.getAccountNumber())){
                 exist.setAccountNumber(account.getAccountNumber());
             }
-            if (StringUtils.hasLength(account.getPin())){
-                exist.setPin(account.getPin());
+            if (StringUtils.hasLength(account.getAccountName())){
+                exist.setAccountName(account.getAccountName());
             }
-            if (StringUtils.hasLength(account.getCardNumber())){
-                exist.setCardNumber(account.getCardNumber());
-            }
-            if (StringUtils.hasLength(account.getCardType())){
-                exist.setCardType(account.getCardType());
-            }
-            if (StringUtils.hasLength(account.getExpiry())){
-                exist.setExpiry(account.getExpiry());
+            if (StringUtils.hasLength(account.getBank())){
+                exist.setBank(account.getBank());
             }
             if (account.getOnlineAccess() != null){
                 exist.setOnlineAccess(account.getOnlineAccess());
+            }
+            if (account.getCard() != null){
+                exist.setCard(account.getCard());
             }
             Account updated = repository.save(exist);
             if ( updated != null && updated.getId() != null){

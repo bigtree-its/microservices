@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -83,7 +84,7 @@ public class TransactionsService {
         boolean valid = false;
         switch (account.getBank()) {
             case ApiConstants.Banks.HSBC:
-                valid = Arrays.asList("DR", "CR", "BP", "CHG", "DD").contains(toSave.getCode());
+                valid = Arrays.asList("DR", "CR", "BP", "CHG", "DD", "TFR").contains(toSave.getCode());
                 break;
             case ApiConstants.Banks.SANTANDER:
                 valid = Arrays.asList("FAST PAYMENT", "CARD PAYMENT", "CREDIT IN", "INT/CHARGES", "DD").contains(toSave.getCode());
@@ -125,13 +126,31 @@ public class TransactionsService {
                         .pageNo(pages.getNumber() + 1)
                         .transactions(pages.getContent())
                         .build();
+                LocalDate oldest = null;
+                LocalDate newest = null;
                 for (Transaction transaction : list) {
-                    if ( transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.Credit)){
-                       transactionResponse.addCredit(transaction.getDescription(), transaction.getAmount());
-                    }else if ( transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.DEBIT)){
-                        transactionResponse.addDebit(transaction.getDescription(), transaction.getAmount());
+                    if (oldest == null) {
+                        oldest = transaction.getDate();
+                    } else {
+                        if (transaction.getDate().isBefore(oldest)) {
+                            oldest = transaction.getDate();
+                        }
+                    }
+                    if (newest == null) {
+                        newest = transaction.getDate();
+                    } else {
+                        if (transaction.getDate().isAfter(newest)) {
+                            newest = transaction.getDate();
+                        }
+                    }
+                    if (transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.Credit)) {
+                        transactionResponse.addCredit(transaction.getCategory() == null ? transaction.getDescription() : transaction.getCategory(), transaction.getAmount());
+                    } else if (transaction.getType().equalsIgnoreCase(ApiConstants.TransactionType.DEBIT)) {
+                        transactionResponse.addDebit(transaction.getCategory() == null ? transaction.getDescription() : transaction.getCategory(), transaction.getAmount());
                     }
                 }
+                transactionResponse.setNewestDate(newest);
+                transactionResponse.setOldestDate(oldest);
                 return transactionResponse;
             }
         }
@@ -169,5 +188,27 @@ public class TransactionsService {
             return getAllDebitTransactions(accountId);
         }
         return getAllCredits(accountId);
+    }
+
+    public void update(Transaction request, Transaction exist) {
+        if (request.getAmount() != null) {
+            exist.setAmount(request.getAmount());
+        }
+        if (request.getCategory() != null) {
+            exist.setCategory(request.getCategory());
+        }
+        if (request.getType() != null) {
+            exist.setType(request.getType());
+        }
+        if (request.getCode() != null) {
+            exist.setCode(request.getCode());
+        }
+        if (request.getBalance() != null) {
+            exist.setBalance(request.getBalance());
+        }
+        if (request.getDate() != null) {
+            exist.setDate(request.getDate());
+        }
+        repository.save(exist);
     }
 }

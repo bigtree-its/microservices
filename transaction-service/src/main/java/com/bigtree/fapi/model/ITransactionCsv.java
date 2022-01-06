@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 public interface ITransactionCsv {
 
+     BigDecimal getBalance();
      BigDecimal getAmount();
      String getCode();
      String getType();

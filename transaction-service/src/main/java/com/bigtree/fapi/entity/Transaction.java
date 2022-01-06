@@ -26,5 +26,7 @@ public class Transaction {
     private String description;
     private String type;
     private String code;
+    private String category;
     private BigDecimal amount;
+    private BigDecimal balance;
 }

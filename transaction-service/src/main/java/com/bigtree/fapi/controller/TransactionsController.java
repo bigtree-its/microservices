@@ -89,6 +89,17 @@ public class TransactionsController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PutMapping(value = "/transactions/{transactionId}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Void> updateTransaction(@Valid @RequestBody Transaction transaction, @PathVariable("transactionId") UUID transactionId){
+        log.info("Received request to create new transaction {}", transactionId);
+        Transaction exist = transactionsService.getTransaction(transactionId);
+        if ( exist == null){
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Transaction not found "+ transactionId);
+        }
+        transactionsService.update(transaction, exist);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping(value = "/transactions")
     public ResponseEntity<ApiResponse> uploadBulkTransactions(@RequestParam("file") MultipartFile file, @RequestHeader("accountId") UUID accountId){
         log.info("Received request to upload bulk transaction for account {}", accountId);

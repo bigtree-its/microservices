@@ -22,16 +22,16 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private UUID companyId;
+    private UUID userId;
+    private String type;
+    private String subType;
     private String accountName;
     private String sortCode;
     private String accountNumber;
     private String bank;
-    private String pin;
-    private String cardNumber;
-    private String cardType;
-    private String expiry;
-    private String securityNumber;
-
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Card card;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private OnlineAccess onlineAccess;
