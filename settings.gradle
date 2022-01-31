@@ -1,3 +1,4 @@
-rootProject.name = 'fapi-service'
+rootProject.name = 'bigtre-ms-services'
 
-include 'transaction-service'
+include 'merchant-service'
+include 'user-service'

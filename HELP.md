@@ -60,9 +60,6 @@ grant all on database fapidb to fapidbuser
 * Grant privileges on databases
 
 ```
-  CREATE USER fapidbuser WITH PASSWORD roach;
-  ```
-```
 CREATE USER fapidbuser WITH PASSWORD roach;
 ```
 ```
