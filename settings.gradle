@@ -1,4 +1,5 @@
-rootProject.name = 'bigtre-ms-services'
+rootProject.name = 'java-services'
 
 include 'merchant-service'
 include 'user-service'
+include 'ecomm-order-service'
