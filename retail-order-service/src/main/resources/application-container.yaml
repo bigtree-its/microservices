@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${ORDERS_DB_HOST:ordersdb}:${ORDERS_DB_PORT:3306}/${ORDERS_DB_NAME:ordersdb}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${ORDERS_DB_USER:ordersdbuser}
+    password: ${ORDERS_DB_PASSWORD:ordersdbpassword}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update

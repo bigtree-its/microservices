@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:remove="all">Template for HTML email (simple)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    Hello,
+    <p th:text="${name}">
+    </p>
+    <p th:text="#{home.welcome}">Welcome to our grocery store!</p>
+    <p>
+        Your order has been confirmed. Order reference <b><p th:text="${reference}"></p></b>
+    </p>
+    <p>Your items are:</p>
+    <ul th:remove="all-but-first">
+        <li th:each="item : ${items}" th:text="${item.productName}"></li>
+    </ul>
+    <p>
+        Regards, <br /> &emsp; <em>The TownBus Team</em>
+    </p>
+</body>
+
+</html>

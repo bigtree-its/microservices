@@ -1,0 +1,50 @@
+##################################################################################################
+# angular
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  labels:
+    app: orders
+    service: orders
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: orders
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: orders
+  labels:
+    account: orders
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-v1
+  labels:
+    app: orders
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: orders
+        version: v1
+    spec:
+      serviceAccountName: orders
+      containers:
+      - name: orders
+        image: gcr.io/nodal-formula-295821/openbasket/order-service:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
