@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;INIT=CREATE SCHEMA IF NOT EXISTS public;DATABASE_TO_UPPER=false
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+  flyway:
+    locations: filesystem:src/main/resources/db/migration
+    enabled: true
+    baseline-one-migrate: true
+
+security:
+  basic:
+    enabled: false
+stripe:
+  private:
+    key: sk_test_51IL6YhCYSHJV743tsokBEqMmHt5JA9u42iLloHOQuPo03pYfCfv3suMeemJv5RXALwkg1PVCeV0mx3va24Gjn9Bx00PhLz22Io
+  success:
+    url: http://localhost:4200/checkout/success
+  cancel:
+    url: http://localhost:4200/checkout/failure

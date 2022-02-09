@@ -1,0 +1,8 @@
+{
+  "object": "list",
+  "data": [],
+  "has_more": false,
+  "url": "/v1/charges?payment_intent\u003dpi_1IMTgFCYSHJV743tL3IUw5vN",
+  "request_options": null,
+  "request_params": null
+}

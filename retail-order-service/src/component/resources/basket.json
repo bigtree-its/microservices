@@ -1,0 +1,13 @@
+{
+  "date": "31-02-2021",
+  "email": "user@gmail.com",
+  "items": [
+    {
+      "productId": "123456768980",
+      "productName": "Banana",
+      "price": 10.00,
+      "quantity": 2,
+      "total": 20.00
+    }
+  ]
+}

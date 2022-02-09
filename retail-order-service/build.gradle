@@ -1,0 +1,136 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.6.3'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+    id 'groovy'
+}
+apply from: '../gradle-scripts/dependencies.gradle'
+
+group = 'com.bigtree'
+version = '1.0'
+description = "ecomm-order-service"
+sourceCompatibility = "16"
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+ext {
+	set('springCloudVersion', "2021.0.0-RC1")
+}
+
+sourceSets {
+    component {
+        groovy.srcDir "$projectDir/src/component/groovy"
+        resources.srcDir "$projectDir/src/component/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    componentImplementation.extendsFrom testImplementation
+    componentRuntime.extendsFrom testRuntime
+}
+
+task componentTest(type: Test){
+    testClassesDirs  = sourceSets.component.output.classesDirs
+    classpath = sourceSets.component.runtimeClasspath
+    mustRunAfter test
+}
+
+//task processPackageResources(type: Copy) {
+//	duplicatesStrategy = DuplicatesStrategy.WARN
+//}
+
+//tasks.findByName("processComponentResources") {
+//	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//}
+
+configurations.all{
+    exclude group: 'org.codehaus.groovy', module: 'groovy-testing'
+}
+
+tasks.named("processComponentResources") {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+//tasks.named<Copy>("processComponentResources") {
+//	duplicatesStrategy = DuplicatesStrategy.WARN
+//}
+
+dependencies {
+	implementation libs.springBootJpa
+	implementation libs.springBootActuator
+	implementation libs.springBootValidation
+	implementation libs.springBootWeb
+	implementation libs.springBootCache
+	implementation libs.springBootStarterMail
+	implementation libs.springBootThymeleaf
+	implementation libs.springBootThymeleafExtra
+	implementation libs.springBootJasypt
+	implementation libs.springBootSecurity
+	implementation libs.springCloudOpenFeign
+	implementation libs.commonsLang
+	implementation libs.apacheCommonsLang
+	implementation libs.apacheCommonCollections
+	implementation libs.lombok
+	implementation libs.jjwt
+	implementation libs.jaxbApi
+	implementation libs.auth0
+	implementation libs.guava
+	implementation libs.mapstruct
+	implementation libs.flywayCore
+	implementation libs.postgresql
+	implementation libs.hikariCP
+	implementation libs.hibernateCore
+	implementation libs.hibernateTypes
+	implementation libs.hibernateJpaModelGen
+	developmentOnly libs.springBootDevTools
+	runtimeOnly libs.h2database
+    implementation group: 'com.stripe', name: 'stripe-java', version: '20.37.0'
+
+    compileOnly libs.gson
+	annotationProcessor libs.lombok
+	annotationProcessor libs.lombokMapStructBinding
+	annotationProcessor libs.mapStructProcessor
+    testRuntime libs.groovyAll
+
+	testImplementation libs.junitJupiter
+	testImplementation libs.mockitoJupiter
+	// testImplementation libs.springBootTest
+	testImplementation libs.springBootSecurityTest
+	testImplementation libs.spockCore
+	testImplementation libs.spockSpring
+	testImplementation libs.hamcrestAll
+
+     testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+check.dependsOn componentTest
+
+test {
+	useJUnitPlatform()
+}
+
+
+targetCompatibility = JavaVersion.VERSION_16
