@@ -76,7 +76,7 @@ ext {
         h2database : "com.h2database:h2:$versions.h2database",
 
         springBootTest : "org.springframework.boot:spring-boot-starter-test:$versions.springBoot",
-        springSecurityTest : "org.springframework.security:spring-security-test",
+        springBootSecurityTest : "org.springframework.security:spring-security-test",
         spockCore : "org.spockframework:spock-core:$versions.spockCore",
         spockSpring : "org.spockframework:spock-spring:$versions.spockSpring",
         hamcrestAll : "org.hamcrest:hamcrest-all:$versions.hamcrestAll",
