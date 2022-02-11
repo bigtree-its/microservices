@@ -18,7 +18,8 @@ apply from: '../gradle-scripts/dependencies.gradle'
 group = 'com.bigtree'
 version = '1.0'
 description = "ecomm-order-service"
-sourceCompatibility = "16"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -100,7 +101,7 @@ dependencies {
 	implementation libs.hibernateJpaModelGen
 	developmentOnly libs.springBootDevTools
 	runtimeOnly libs.h2database
-    implementation group: 'com.stripe', name: 'stripe-java', version: '20.37.0'
+    implementation group: 'com.stripe', name: 'stripe-java', version: '20.99.0'
 
     compileOnly libs.gson
 	annotationProcessor libs.lombok

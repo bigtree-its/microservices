@@ -9,7 +9,7 @@ services:
     ports:
       - 9090:8080
       - 26257:26257    
-    command: ["start", "--insecure", "--advertise-addr=roach1"]
+    command: ["cockroach start-single-node", "--insecure", "--advertise-addr=roach1"]
   cockroachdb2:
     image: cockroachdb/cockroach:v19.2.5
     container_name: roach2
@@ -18,8 +18,8 @@ services:
       - ./db/roach2:/cockroach/cockroach-data
     ports:
       - 9091:8080
-      - 26258:26257    
-    command: ["start", "--insecure", "--advertise-addr=roach2", "--join=roach1"]
+      - 26258:26257
+    command: ["cockroach start-single-node", "--insecure", "--advertise-addr=roach2", "--join=roach1"]
   cockroachdb3:
     image: cockroachdb/cockroach:v19.2.5
     container_name: roach3
@@ -28,5 +28,5 @@ services:
       - ./db/roach3:/cockroach/cockroach-data
     ports:
       - 9092:8080
-      - 26259:26257    
-    command: ["start", "--insecure", "--advertise-addr=roach3", "--join=roach1"]
+      - 26259:26257
+    command: ["cockroach start-single-node", "--insecure", "--advertise-addr=roach3", "--join=roach1"]
