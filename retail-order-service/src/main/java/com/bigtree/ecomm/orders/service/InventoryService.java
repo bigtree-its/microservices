@@ -26,7 +26,7 @@ public class InventoryService {
     InventoryRepository inventoryRepository;
 
     public InventoryResponse check(final Basket basket) {
-        log.info("Checking inventory for basket {}", StringUtils.isEmpty(basket.getEmail()) ? basket.getIp(): basket.getEmail());
+        log.info("Checking inventory for basket {}", StringUtils.isEmpty(basket.getCustomerEmail()) ? basket.getIp(): basket.getCustomerEmail());
         final List<InventoryItem> inventoryItems = new ArrayList<>();
         final InventoryResponse response = InventoryResponse.builder()
                 .items(inventoryItems)

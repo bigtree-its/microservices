@@ -1,6 +1,6 @@
 rootProject.name = 'java-services'
 
 include 'merchant-service'
-include 'user-service'
+include 'customer-service'
 include 'retail-order-service'
 

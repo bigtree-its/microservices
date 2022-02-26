@@ -40,9 +40,10 @@ public class Order extends BaseEntity {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER)
 	private Set<OrderItem> items;
-	private String email;
+	private String customerEmail;
 	private String reference;
 	private String currency;
+	private String paymentReference;
 	private BigDecimal shippingCost;
 	private BigDecimal saleTax;
 	private BigDecimal subTotal;

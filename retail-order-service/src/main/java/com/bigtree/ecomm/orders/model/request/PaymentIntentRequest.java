@@ -19,4 +19,6 @@ public class PaymentIntentRequest {
     private long deliveryCost;
     private long packagingCost;
     private String currency;
+    // To Link Payments with Customer
+    private String customerEmail;
 }

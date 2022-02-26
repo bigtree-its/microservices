@@ -59,7 +59,7 @@ class OrderControllerComponentTest extends Specification {
         HttpHeaders headers = new HttpHeaders();
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/orders")
                 .headers(headers)
-                .param("email", "user@email.com")
+                .param("email", "customer@email.com")
 
         when: 'GET call to orders endpoint'
         orderService.findOrdersWithQuery(_) >> Arrays.asList(getDummyOrder())
@@ -77,7 +77,7 @@ class OrderControllerComponentTest extends Specification {
                 .address(Address.builder().lineNumber1("lineNumber1").lineNumber2("lineNumber2").city("city")
                         .country("GB").postCode("ABC1234").build())
                 .date(LocalDate.now())
-                .email("user@email.com")
+                .email("customer@email.com")
                 .reference("reference")
                 .status(OrderStatus.CREATED)
                 .subTotal(BigDecimal.valueOf(20))

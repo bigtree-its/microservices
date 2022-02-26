@@ -27,11 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BasketRepository extends JpaRepository<Basket, UUID> {
     
     /**
-	 * Retrieve all <code>Basket</code>s from the data store for given user's email
+	 * Retrieve all <code>Basket</code>s from the data store for given customer's email
 	 * @return a <code>Collection</code> of <code>Basket</code>s
 	 */
     @Transactional(readOnly = true)
-    Basket findByEmail(@Param("email") String email);
+    Basket findByCustomerEmail(@Param("customerEmail") String customerEmail);
 
 	/**
 	 * Retrieve all <code>Basket</code>s from the data store for given IP

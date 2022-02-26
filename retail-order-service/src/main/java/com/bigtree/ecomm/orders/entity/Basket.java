@@ -25,7 +25,7 @@ public class Basket extends BaseEntity {
 	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "basket", fetch = FetchType.EAGER)
 	private Set<BasketItem> items;
-	private String email;
+	private String customerEmail;
 	private String ip;
 	private BigDecimal total;
 

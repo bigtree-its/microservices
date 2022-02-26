@@ -30,6 +30,7 @@ import org.hibernate.annotations.FetchMode;
 public class Return extends BaseEntity {
     
     private UUID orderId;
+    private String customerEmail;
 
     @Singular
     @Fetch(FetchMode.SUBSELECT)

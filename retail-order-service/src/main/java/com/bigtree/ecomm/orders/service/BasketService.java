@@ -27,26 +27,26 @@ public class BasketService {
 
     public void create(Basket basket) {
         final Set<BasketItem> items = new HashSet<>(basket.getItems());
-        log.info("Creating new basket for user: {}", StringUtils.isEmpty(basket.getEmail()) ? basket.getIp(): basket.getEmail());
+        log.info("Creating new basket for customer: {}", StringUtils.isEmpty(basket.getCustomerEmail()) ? basket.getIp(): basket.getCustomerEmail());
         basket.setItems(null);
         if (basket.getDate() == null) {
             basket.setDate(LocalDate.now());
         }
         Basket saved = basketRepository.save(basket);
         if (saved != null) {
-            log.info("Basket created for user: {}", StringUtils.isEmpty(saved.getEmail()) ? saved.getIp(): saved.getEmail());
+            log.info("Basket created for customer: {}", StringUtils.isEmpty(saved.getCustomerEmail()) ? saved.getIp(): saved.getCustomerEmail());
             for (BasketItem basketItem : items) {
                 basketItem.setBasket(saved);
             }
             basketItemRepository.saveAll(items);
         } else {
-            log.error("Basket not saved for user {}", basket.getEmail());
+            log.error("Basket not saved for customer {}", basket.getCustomerEmail());
         }
     }
 
-    public Basket retrieveBasket(String email) {
-        log.info("Retrieving a basket for user {}", email);
-        return basketRepository.findByEmail(email);
+    public Basket retrieveBasket(String customerEmail) {
+        log.info("Retrieving a basket for customer {}", customerEmail);
+        return basketRepository.findByCustomerEmail(customerEmail);
     }
 
     public boolean deleteById(UUID id) {
@@ -61,9 +61,9 @@ public class BasketService {
     public List<Basket> findBaskets(Map<String, String> qParams) {
         final List<Basket> result = new ArrayList<>();
         qParams.forEach((k, v) -> {
-            if (k.equalsIgnoreCase("email")) {
-                log.info("Looking for basket with email {}", v);
-                result.add(basketRepository.findByEmail(v));
+            if (k.equalsIgnoreCase("customerEmail")) {
+                log.info("Looking for basket with customer Email {}", v);
+                result.add(basketRepository.findByCustomerEmail(v));
             } else if (k.equalsIgnoreCase("ip")) {
                 log.info("Looking for basket with ip {}", v);
                 Optional<Basket> findById = basketRepository.findById(UUID.fromString(v));
@@ -140,7 +140,7 @@ public class BasketService {
                 // Delete Orphan
                 if (! found){
                     item.setBasket(saved);
-                    log.info("Saving new item {} to basket {}", item.getProductId(), StringUtils.isEmpty(saved.getEmail()) ? saved.getIp(): saved.getEmail());
+                    log.info("Saving new item {} to basket for customer {}", item.getProductId(), StringUtils.isEmpty(saved.getCustomerEmail()) ? saved.getIp(): saved.getCustomerEmail());
                     basketItemRepository.save(item);
                 }
             }
@@ -157,9 +157,9 @@ public class BasketService {
         return false;
     }
 
-    public boolean delete(String email){
-        log.info("Cleaning up the user basket {}", email);
-        Basket basket = basketRepository.findByEmail(email);
+    public boolean delete(String customerEmail){
+        log.info("Cleaning up the customer basket {}", customerEmail);
+        Basket basket = basketRepository.findByCustomerEmail(customerEmail);
         if ( basket != null){
             basketRepository.deleteById(basket.getId());
             return true;

@@ -18,6 +18,7 @@ import java.util.UUID;
 public class ActionResponse {
     
     private String object;
+    private UUID reference;
     private UUID id;
     private Action action;
     private String requestDescription;

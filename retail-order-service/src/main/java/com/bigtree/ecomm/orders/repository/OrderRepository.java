@@ -33,11 +33,11 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Long countByDate(LocalDate date);
 
     /**
-	 * Retrieve all <code>Order</code>s from the data store for given user's email
+	 * Retrieve all <code>Order</code>s from the data store for given customer's email
 	 * @return a <code>Collection</code> of <code>Order</code>s
 	 */
     @Transactional(readOnly = true)
-    List<Order> findByEmailOrderByDateDesc(String email);
+    List<Order> findByCustomerEmailOrderByDateDesc(String customerEmail);
 
     /**
 	 * Retrieve all <code>Order</code>s from the data store for given reference
@@ -52,8 +52,8 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 	 * @return a <code>Collection</code> of <code>Order</code>s
 	 */
     @Transactional(readOnly = true)
-    @Query("SELECT o FROM Order o WHERE o.email = ?1 AND o.reference = ?2")
-    Collection<Order> findByQueryOrderByDateDesc(String email, String reference);
+    @Query("SELECT o FROM Order o WHERE o.customerEmail = ?1 AND o.reference = ?2")
+    Collection<Order> findByQueryOrderByDateDesc(String customerEmail, String reference);
     
     /**
 	 * Retrieve all <code>Order</code>s from the data store for given status

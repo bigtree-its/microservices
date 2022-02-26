@@ -3,6 +3,7 @@ package com.bigtree.ecomm.orders.controller;
 import java.util.*;
 
 import com.bigtree.ecomm.orders.entity.Order;
+import com.bigtree.ecomm.orders.entity.Payment;
 import com.bigtree.ecomm.orders.model.enums.Action;
 import com.bigtree.ecomm.orders.model.request.UpdateStatus;
 import com.bigtree.ecomm.orders.model.response.ActionResponse;
@@ -11,6 +12,7 @@ import com.bigtree.ecomm.orders.model.response.Orders;
 import com.bigtree.ecomm.orders.repository.OrderRepository;
 import com.bigtree.ecomm.orders.service.OrderService;
 
+import com.bigtree.ecomm.orders.service.PaymentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,9 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    PaymentService paymentService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/orders")
@@ -82,6 +87,14 @@ public class OrderController {
         return ResponseEntity.ok().body(order.isPresent() ? order.get() : null);
     }
 
+    @DeleteMapping("/orders/{id}")
+    public ResponseEntity<ActionResponse> delete(@PathVariable("id") UUID id) {
+        log.info("Received request to delete order by id {}", id);
+        boolean deleted = orderService.delete(id);
+        return ResponseEntity.ok()
+                .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("Order").id(id).build());
+    }
+
     @CrossOrigin(origins = "*")
     @PutMapping("/orders/{id}")
     public ResponseEntity<ActionResponse> updateStatus(@RequestBody UpdateStatus status,
@@ -92,13 +105,7 @@ public class OrderController {
                 .body(ActionResponse.builder().action(Action.UPDATE).status(updated).object("Order").id(id).build());
     }
 
-    @DeleteMapping("/orders/{id}")
-    public ResponseEntity<ActionResponse> delete(@PathVariable("id") UUID id) {
-        log.info("Received request to delete order by id {}", id);
-        boolean deleted = orderService.delete(id);
-        return ResponseEntity.ok()
-                .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("Order").id(id).build());
-    }
+
 
     @CrossOrigin(origins = "*")
     @PutMapping("/orders/{orderId}/items/{itemId}/cancellation")
@@ -123,15 +130,10 @@ public class OrderController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/orders")
-    public ResponseEntity<OrderCreateResponse> create(@RequestBody Order order) {
+    public ResponseEntity<Order> create(@RequestBody Order order) {
         log.info("Received request to create new order. {}", order.toString());
-        String reference = orderService.create(order);
-        if (!StringUtils.isEmpty(reference)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    OrderCreateResponse.builder().reference(reference).message("Order created successfully").build());
-        } else {
-            return ResponseEntity.status(HttpStatus.PROCESSING).body(
-                OrderCreateResponse.builder().message("Order creation in progress").build());
-        }
+        Order created = orderService.create(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
+
 }

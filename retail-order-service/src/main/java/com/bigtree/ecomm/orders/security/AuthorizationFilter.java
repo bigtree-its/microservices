@@ -24,7 +24,7 @@ public class AuthorizationFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
                 log.info("Validating request..");
                 if ( validateRequest(request)){
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("user", null, new ArrayList<>());
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("customer", null, new ArrayList<>());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     log.info("Authorized");
                     filterChain.doFilter(request, response);

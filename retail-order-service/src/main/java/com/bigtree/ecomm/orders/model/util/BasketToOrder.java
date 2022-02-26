@@ -15,7 +15,7 @@ public class BasketToOrder {
     public static Order fromBasket(Basket basket) {
         if (basket != null) {
             return Order.builder()
-            .email(basket.getEmail())
+            .customerEmail(basket.getCustomerEmail())
             .build();
         }
         return null;

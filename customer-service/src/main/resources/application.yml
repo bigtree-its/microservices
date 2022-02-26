@@ -1,0 +1,58 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: customer-service
+  main:
+    banner-mode: "off"
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas:
+      location: classpath:db/db.migration
+  datasource:
+#    url: jdbc:postgresql://localhost:26257/foodiodb?sslmode=verify-full&applciation_name=transationservice&logServerErrorDetail=falsesocketTimeout=30
+    url: jdbc:postgresql://localhost:26258/openecomm?logServerErrorDetail=false&socketTimeout=30
+    username: openecommdbuser
+    password:
+      driver-class-name: org.postgresql.Driver
+    hikari:
+      autocommit: true
+      poolName: CockroachHikariCP
+      minimumIdle: 5
+      validation-timeout: 500
+      conenctionTimeout: 5000
+      maximum-pool-size: 20
+      keepalive-time: 60000
+      max-lifetime: 240000
+    jpa:
+      properties:
+        hibernate:
+          order_inserts: true
+          order_updates: true
+          dialect: org.hibernate.dialect.PostgreSQL95Dialect
+          use_sql_comments: true
+          format_sql: true
+          jdbc:
+            batch_size: 20
+            batch_versioned_data: true
+            lob:
+              non_contextual_creation: true
+      show-sql: false
+      open-in-view: false
+
+
+  logging:
+    level:
+      root: INFO
+    org:
+      springframework.web: INFO
+      hibernate: INFO
+      hibernate.SQL: INFO
+      hibernate.cache: INFO
+      hibernate.stat: INFO
+

@@ -51,9 +51,9 @@ use fapidb;
 
 * Crate User
 ```
-create user fapidbuser;
+create customer fapidbuser;
 ```
-* Grant privileges to the user 
+* Grant privileges to the customer 
 ```
 grant all on database fapidb to fapidbuser
 ```

@@ -2,8 +2,10 @@ package com.bigtree.ecomm.orders.controller;
 
 import com.bigtree.ecomm.orders.entity.Basket;
 import com.bigtree.ecomm.orders.entity.BasketItem;
+import com.bigtree.ecomm.orders.entity.Payment;
 import com.bigtree.ecomm.orders.model.request.PaymentIntentRequest;
 import com.bigtree.ecomm.orders.model.response.PaymentIntentResponse;
+import com.bigtree.ecomm.orders.service.PaymentService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
@@ -11,6 +13,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +39,9 @@ public class StripeCheckoutController {
     @Value("${stripe.currency}")
     private String currency;
 
+    @Autowired
+    PaymentService paymentService;
+
     @CrossOrigin(origins = "*")
     @PostMapping("/create-checkout-session")
     public ResponseEntity<PaymentIntentResponse> createCheckoutSession(@RequestBody Basket basket) {
@@ -47,7 +53,7 @@ public class StripeCheckoutController {
                     .setQuantity(item.getQuantity().longValue())
                     .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
                             .setCurrency(currency)
-                            .setUnitAmount(item.getPrice().longValue()*100)
+                            .setUnitAmount(item.getPrice().longValue() * 100)
                             .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                     .setName(item.getProductName()).build())
                             .build())
@@ -78,18 +84,18 @@ public class StripeCheckoutController {
     private ResponseEntity<PaymentIntentResponse> createPaymentIntent(@RequestBody PaymentIntentRequest request) {
         Stripe.apiKey = stripeKey;
         long totalCost = request.getSubTotal() + request.getDeliveryCost() + request.getPackagingCost() + request.getSaleTax();
-        log.info("Received request create Payment Intent for amount {} pence.",totalCost);
+        log.info("Received request create Payment Intent for amount {} pence.", totalCost);
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
+                        .setCustomer(request.getCustomerEmail())
                         .setCurrency(currency)
                         .setAmount(totalCost)
                         // Verify your integration in this guide by including this parameter
                         .putMetadata("integration_check", "accept_a_payment")
                         .build();
-        PaymentIntentResponse response = null;
         try {
             PaymentIntent intent = PaymentIntent.create(params);
-            response = PaymentIntentResponse.builder()
+            final PaymentIntentResponse response = PaymentIntentResponse.builder()
                     .id(intent.getId())
                     .amount(intent.getAmount())
                     .currency(intent.getCurrency())
@@ -102,15 +108,35 @@ public class StripeCheckoutController {
                     .chargesUrl(intent.getCharges().getUrl())
                     .build();
             log.info("Returning payment intent for amount: {}, Id: {}", intent.getAmount(), intent.getId());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    createPayment(response, request);
+                }
+            }).start();
             return ResponseEntity.ok(response);
         } catch (StripeException e) {
             log.error("Unable to create payment intent {}", e.getMessage());
-            response = PaymentIntentResponse.builder()
+            PaymentIntentResponse response = PaymentIntentResponse.builder()
                     .error(true)
                     .errorMessage(e.getMessage())
                     .build();
+            return ResponseEntity.ok(response);
         }
-        return ResponseEntity.ok(response);
+
+    }
+
+    private void createPayment(PaymentIntentResponse response, PaymentIntentRequest request) {
+        final Payment payment = Payment.builder()
+                .paymentMethod(response.getPaymentMethod())
+                .currency(response.getCurrency())
+                .amount(BigDecimal.valueOf(response.getAmount()))
+                .customerEmail(request.getCustomerEmail())
+                .stripeReference(response.getId())
+                .status(response.getStatus())
+                .build();
+        final Payment saved = paymentService.create(payment);
+        log.info("PaymentIntent has been created for customer {} with Reference {}", payment.getCustomerEmail(), saved.getStripeReference());
     }
 
     private long getOrderAmount(Basket basket) {

@@ -32,7 +32,7 @@ public class EmailService {
     ResourceConfig resourceConfig;
 
     public void sendOrderConfirmation(Order order) {
-        log.info("Sending order confirmation email {} to {}", order.getReference(), order.getEmail());
+        log.info("Sending order confirmation customer email {} to {}", order.getReference(), order.getCustomerEmail());
         Map<String, Object> params = new HashMap<>();
         params.put("order", order);
         params.put("count", order.getItems().size());
@@ -40,7 +40,7 @@ public class EmailService {
         Calendar cal = Calendar.getInstance();
         params.put("today", dateFormat.format(cal.getTime()));
         params.put("deliveryDate", dateFormat.format(cal.getTime()));
-        sendMail(order.getEmail(), "BigTree Order Confirmation", "order", params);
+        sendMail(order.getCustomerEmail(), "BEKU Order Confirmation", "order", params);
     }
 
     public void sendMail(String to, String subject, String template, Map<String, Object> params) {

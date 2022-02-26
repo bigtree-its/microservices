@@ -29,13 +29,16 @@ public class OrderService {
     ItemRepository itemRepository;
 
     @Autowired
-    EmailService emailService;
+    EmailService customerEmailService;
 
     @Autowired
     BasketService basketService;
 
+    @Autowired
+    PaymentService paymentService;
+
     @Transactional
-    public String create(Order order) {
+    public Order create(Order order) {
         Set<OrderItem> items = new HashSet<>(order.getItems());
         log.info("Saving order with {} items", items.size());
         for (OrderItem orderItem : items) {
@@ -52,7 +55,7 @@ public class OrderService {
         }
         Order saved = orderRepository.save(order);
         if (saved != null) {
-            log.info("Order {} created for user {}", saved.getReference(), saved.getEmail());
+            log.info("Order {} created for customer {}", saved.getReference(), saved.getCustomerEmail());
             for (OrderItem orderItem : items) {
                 orderItem.setOrder(saved);
             }
@@ -66,13 +69,14 @@ public class OrderService {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    basketService.delete(saved.getEmail());
+                    basketService.delete(saved.getCustomerEmail());
                 }
             }).start();
+            new Thread(() -> paymentService.updatePaymentForOrder(saved)).start();
 
-            return saved.getReference();
+            return saved;
         } else {
-            log.error("Order not created for user {}", order.getEmail());
+            log.error("Order not created for customer {}", order.getCustomerEmail());
         }
         return null;
     }
@@ -97,7 +101,7 @@ public class OrderService {
         body.put("order", order);
         body.put("items", order.getItems());
         body.put("address", order.getAddress());
-        emailService.sendMail(order.getEmail(), subject, "order", body);
+        customerEmailService.sendMail(order.getCustomerEmail(), subject, "order", body);
     }
 
     public boolean updateStatus(UUID id, UpdateStatus status) {
@@ -115,8 +119,7 @@ public class OrderService {
         Optional<Order> findById = orderRepository.findById(id);
         if (findById.isPresent()) {
             Order order = findById.get();
-            order.setDateDeleted(LocalDateTime.now());
-            orderRepository.save(order);
+            orderRepository.delete(order);
             return true;
         }
         return false;
@@ -125,9 +128,9 @@ public class OrderService {
     public List<Order> findOrdersWithQuery(Map<String, String> qParams) {
         final List<Order> result = new ArrayList<>();
         qParams.forEach((k, v) -> {
-            if (k.equalsIgnoreCase("email")) {
-                log.info("Looking for orders with email {}", v);
-                result.addAll(orderRepository.findByEmailOrderByDateDesc(v));
+            if (k.equalsIgnoreCase("customerEmail")) {
+                log.info("Looking for orders with customerEmail {}", v);
+                result.addAll(orderRepository.findByCustomerEmailOrderByDateDesc(v));
             } else if (k.equalsIgnoreCase("reference")) {
                 log.info("Looking for orders with reference {}", v);
                 result.addAll(orderRepository.findByReference(v));
