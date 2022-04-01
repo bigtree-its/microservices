@@ -1,0 +1,7 @@
+{
+  "currency": "gbp",
+  "subTotal": 2000,
+  "deliveryCost": 200,
+  "saleTax": 40,
+  "packagingCost": 150
+}

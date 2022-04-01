@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  orders:
+     image: bigtree/chef-order-service:v1
+     ports:
+     - 8082:8080
+     environment:
+       ORDERS_DB_PASSWORD: ordersdbpassword
+       ORDERS_DB_HOST: ordersdb
+       ORDERS_DB_USER: ordersdbuser
+       ORDERS_DB_NAME: ordersdb
+#  cloud-sql-proxy:
+#    image: gcr.io/cloudsql-docker/gce-proxy:1.11
+#    # Port: MySQL (3306)
+#    command: ./cloud_sql_proxy -instances=polynomial-park-304709:europe-west2:sql-instance=tcp:0.0.0.0:3306
+#    volumes:
+#    # this mounts your application default credential on the container, preventing the
+#    # 'invalid json file "/config": google: read JWT from JSON credentials: 'type' field is "authorized_user" (expected "service_account")'
+#    # error if you point to the actual credential file directly
+#    - ~/.config:/root/.config
+#    # - ${GOOGLE_APPLICATION_CREDENTIALS}:/root/.config
+#    ports:
+#    - 3306:3306
+
+  ordersdb:
+    image: mysql:5.7
+    volumes:
+      - ordersdb-data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ordersdbpassword
+      MYSQL_DATABASE: ordersdb
+      MYSQL_USER: ordersdbuser
+      MYSQL_PASSWORD: ordersdbpassword
+
+volumes:
+  ordersdb-data:

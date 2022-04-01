@@ -128,7 +128,7 @@ public class CustomerService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Customer already exist");
         }
         log.info("Registering an customer");
-        Customer newCustomer = Customer.builder().email(req.getEmail()).firstName(req.getFirstName()).lastName(req.getLastName()).mobile(req.getMobile()).build();
+        Customer newCustomer = Customer.builder().email(req.getEmail()).fullName(req.getFullName()).mobile(req.getMobile()).build();
         Customer saved = repository.save(newCustomer);
         if ( saved != null && saved.getId() != null){
             log.info("Customer created {}", saved.getId());

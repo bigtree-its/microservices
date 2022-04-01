@@ -24,6 +24,7 @@ public class Customer {
     private String firstName;
     private String email;
     private String lastName;
+    private String fullName;
     private String mobile;
 
     @Type(type = "jsonb")

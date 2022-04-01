@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gcp:
+      sql:
+        instance-connection-name: polynomial-park-304709:europe-west2:ordersdb-instance
+        database-name: ordersdb
+    appId: polynomial-park-304709
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update

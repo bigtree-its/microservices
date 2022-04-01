@@ -3,4 +3,5 @@ rootProject.name = 'java-services'
 include 'merchant-service'
 include 'customer-service'
 include 'retail-order-service'
+include 'chef-order-service'
 
