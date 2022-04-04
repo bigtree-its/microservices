@@ -2,9 +2,9 @@ jasypt:
   encryptor:
     password: projectopenchef
 server:
-  port: 8082
+  port: 8085
   servlet:
-    context-path: ${ORDERS_CONTEXT_PATH:/airchef/v1}
+    context-path: ${ORDERS_CONTEXT_PATH:/openchef/v1}
   compression:
     enabled: true
     mime-types: application/json,text/html,text/xml,text/plain,text/css,text/javascript
@@ -87,6 +87,10 @@ smtp:
   password: ENC(TjG6Eql70rAePtLrGyax+lC+FaRoZ7rx)
   debug: false
 
+twilio:
+  ACCOUNT_ID: AC037d38d51bbc4ee614d8d5c99a6db367
+  AUTH_TOKEN: 486b2357d0b17a3bee2ebb3ea8ce5638
+  FROM_NUMBER: +17153333752
 
 management:
   info:

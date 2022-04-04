@@ -34,6 +34,7 @@ ext {
         commonCollections : '4.4',
         groovyAll : '3.0.9',
         springSecurityTest : '2.5.2',
+        twilio : '8.28.0',
     ]
     libs = [
         junit : "junit:junit:$versions.junit",
@@ -49,8 +50,10 @@ ext {
         springBootCache : "org.springframework.boot:spring-boot-starter-cache:$versions.springBoot",
         springBootSecurity : "org.springframework.boot:spring-boot-starter-security:$versions.springBoot",
         springBootStarterMail : "org.springframework.boot:spring-boot-starter-mail:$versions.springBoot",
+        springBootWebSocket : "org.springframework.boot:spring-boot-starter-websocket:$versions.springBoot",
         springBootThymeleafExtra : "org.thymeleaf.extras:thymeleaf-extras-java8time:$versions.springBootThymeleafExtra",
         springBootJasypt : "com.github.ulisesbocchio:jasypt-spring-boot-starter:$versions.springBootJasypt",
+        twilio : "com.twilio.sdk:twilio:$versions.twilio",
 
         lombok : "org.projectlombok:lombok:$versions.lombok",
         jjwt : "io.jsonwebtoken:jjwt:$versions.jjwt",

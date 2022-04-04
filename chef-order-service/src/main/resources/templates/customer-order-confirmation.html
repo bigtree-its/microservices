@@ -159,16 +159,27 @@
                 Your Order! </h2>
         </div>
         <div align="center" class="confirmation-summary">
-            <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #4b4848;"> Thanks for your order.
-                We’ll let you know once your order confirmed by your Chef. You will receice another email from us confirming your order.
+            <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #4b4848;"> Thanks for your order. 
+                We are happy to let you know that your order has been confirmed by your Chef. 
                 You can view the status of your order by visiting Your Orders on www.urchef.co.uk
             </p>
+            <div th:if="${order.delivery}">
+                <p>
+                    Your order will be delivered on <span th:utext="${#temporals.format(order.expectedDeliveryDate, 'dd MMM yyyy')}"></span>
+                </p>
+            </div>
+            <div th:if="${order.pickup}">
+                <p>
+                    Your order will be ready for pick up on <span th:utext="${#temporals.format(order.expectedPickupDate, 'dd MMM yyyy')}"></span>
+                </p>
+            </div>
         </div>
         <div class="order-confirmation-header">
             <span>Your Order #<span th:utext="${order.reference}"></span></span>
         </div>
         <hr>
         <div>
+            <span style="font-weight: 600;font-size: 20px;">You Ordered From</span><br>
             <table style="height: 40px;">
                 <tr>
                     <td style="height: 60px;width:60px;"><img th:src="${chef.image}" width="100%" height="100%" loading="lazy" style="object-fit: cover;"></td>
@@ -195,12 +206,12 @@
 
         </div>
         <hr>
-        <div th:each="item: ${items}">
-            <div style="display: flex;justify-content: space-between;width: 100%;padding: 1px 0;">
+        <div  class="items-section" th:each="item: ${items}">
+            <div style="display: flex;justify-content: space-between;width: 100%;padding: 5px 0;">
                 <div style="width: 60px;height: 60px;">
                     <img th:src="${item.image}" width="100%" height="100%" loading="lazy" style="object-fit: cover;">
                 </div>
-                <div style="width: 100%;">
+                <div style="width: 80%;">
                     <table cellspacing="0" cellpadding="0" border="0" width="100% ">
                         <tr width="100%" class="summary-item-row">
                             <td width="5%" align="left"><span style="width: 5%;padding: 0 10px;font-weight: 600;"
@@ -231,6 +242,7 @@
                 </div>
             </div>
         </div>
+
         <hr>
         <div class="items-section">
             <table cellspacing="0" cellpadding="0" border="0" width="100% ">

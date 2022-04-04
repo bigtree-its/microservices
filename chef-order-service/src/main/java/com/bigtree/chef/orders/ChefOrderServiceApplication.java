@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -15,6 +16,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import java.util.Properties;
 
 @SpringBootApplication
+@EnableWebSocketMessageBroker
 public class ChefOrderServiceApplication {
 
     public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";

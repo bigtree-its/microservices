@@ -23,4 +23,5 @@ public class Address {
     String latitude;
     @JsonProperty("longitude")
     String longitude;
+
 }

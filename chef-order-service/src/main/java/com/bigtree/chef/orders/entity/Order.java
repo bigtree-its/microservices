@@ -5,17 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Column;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
 import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
 
@@ -23,7 +19,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -36,13 +31,6 @@ import java.util.UUID;
 public class Order extends BaseEntity {
 
 	private UUID chefId;
-//	@Singular
-//	@Fetch(FetchMode.SUBSELECT)
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER)
-
-	@Type(type = "jsonb")
-	@Column(columnDefinition = "jsonb")
-	private List<OrderItem> items;
 	private String customerEmail;
 	private String customerMobile;
 	private String reference;
@@ -59,18 +47,27 @@ public class Order extends BaseEntity {
 	@JsonFormat(pattern="dd/MMM/yyyy")
 	private LocalDate expectedDeliveryDate;
 	@JsonFormat(pattern="dd/MMM/yyyy")
-	private LocalDate expectedCollectionDate;
+	private LocalDate expectedPickupDate;
 	private LocalDateTime orderCreated;
 	private LocalDateTime orderAccepted;
 	private LocalDateTime orderCollected;
 	private LocalDateTime orderDelivered;
 	private LocalDateTime orderPickedUpByDeliveryPartner;
 	private boolean deleted;
+	private boolean delivery;
+	private boolean pickup;
 
 	@Type(type = "jsonb")
 	@Column(columnDefinition = "jsonb")
-	private Address address;
+	private Chef chef;
 
+	@Type(type = "jsonb")
+	@Column(columnDefinition = "jsonb")
+	private Customer customer;
+
+	@Type(type = "jsonb")
+	@Column(columnDefinition = "jsonb")
+	private List<OrderItem> items;
 
 
 }

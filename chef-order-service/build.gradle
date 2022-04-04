@@ -99,6 +99,8 @@ dependencies {
 	implementation libs.hibernateCore
 	implementation libs.hibernateTypes
 	implementation libs.hibernateJpaModelGen
+	implementation libs.springBootWebSocket
+	implementation libs.twilio
 	developmentOnly libs.springBootDevTools
 	runtimeOnly libs.h2database
     implementation group: 'com.stripe', name: 'stripe-java', version: '20.99.0'

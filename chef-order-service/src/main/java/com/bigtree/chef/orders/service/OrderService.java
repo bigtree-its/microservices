@@ -90,11 +90,12 @@ public class OrderService {
     }
 
     private void sendOrderConfirmation(Order order) {
-        String subject = "Your BigTree order #" + order.getReference();
+        String subject = "Your BigChef order #" + order.getReference();
         Map<String, Object> body = new HashMap<>();
         body.put("order", order);
+        body.put("customer", order.getCustomer());
         body.put("items", order.getItems());
-        body.put("address", order.getAddress());
+        body.put("chef", order.getChef());
         customerEmailService.sendMail(order.getCustomerEmail(), subject, "order", body);
     }
 
