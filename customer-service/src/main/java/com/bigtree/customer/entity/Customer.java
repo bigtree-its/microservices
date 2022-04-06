@@ -22,13 +22,15 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String firstName;
-    private String email;
     private String lastName;
     private String fullName;
-    private String mobile;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Address address;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Contact contact;
 
 }

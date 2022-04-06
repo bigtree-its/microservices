@@ -39,8 +39,13 @@ dependencies {
 	implementation libs.springBootActuator
 	implementation libs.springBootValidation
 	implementation libs.springBootWeb
+	implementation libs.springBootStarterMail
+	implementation libs.springBootThymeleaf
+	implementation libs.springBootThymeleafExtra
+	implementation libs.springBootJasypt
 	implementation libs.springCloudOpenFeign
 	implementation libs.commonsLang
+	implementation libs.springBootSecurity
 	implementation libs.lombok
 	implementation libs.mapstruct
 	implementation libs.flywayCore
@@ -56,6 +61,7 @@ dependencies {
 	annotationProcessor libs.lombokMapStructBinding
 	annotationProcessor libs.mapStructProcessor
 	testImplementation libs.springBootTest
+	testImplementation libs.springBootSecurityTest
 }
 
 dependencyManagement {

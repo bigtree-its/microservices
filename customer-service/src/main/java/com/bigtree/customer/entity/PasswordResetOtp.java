@@ -21,4 +21,5 @@ public class PasswordResetOtp {
     private UUID customerId;
     private UUID otp;
     private LocalDateTime start;
+    private LocalDateTime expiresAt;
 }

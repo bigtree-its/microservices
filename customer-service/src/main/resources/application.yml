@@ -1,5 +1,14 @@
+jasypt:
+  encryptor:
+    password: projectopenchef
+
 server:
   port: 8081
+  servlet:
+    context-path: ${ORDERS_CONTEXT_PATH:/urchef/v1}
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/xml,text/plain,text/css,text/javascript
 spring:
   application:
     name: customer-service
@@ -45,6 +54,20 @@ spring:
       show-sql: false
       open-in-view: false
 
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username:
+    pasword:
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
 
   logging:
     level:
@@ -56,3 +79,8 @@ spring:
       hibernate.cache: INFO
       hibernate.stat: INFO
 
+smtp:
+  server: ${SMTP_SERVER:smtp.gmail.com}
+  username: ENC(LkDbZfYefONZr/c5TX4NH0pJG9D355M49WaudG4Ivx1NQKAU1lIqiQ==)
+  password: ENC(TjG6Eql70rAePtLrGyax+lC+FaRoZ7rx)
+  debug: false

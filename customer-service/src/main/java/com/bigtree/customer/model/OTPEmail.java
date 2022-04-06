@@ -7,10 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
+@NoArgsConstructor
+public class OTPEmail {
 
-    private String email;
-    private String password;
+    private String otp;
+    private String customerEmail;
+    private String customerName;
+    private String passwordResetLink;
+
 }

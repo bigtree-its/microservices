@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
-    @Query("SELECT a from Customer a where a.email = :email")
+    @Query(nativeQuery = true, value = "SELECT * FROM customers WHERE contact ->> 'email' = :email")
     Customer findByEmail(@Param("email") String email);
 }

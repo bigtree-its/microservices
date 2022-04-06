@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 @Service
@@ -33,6 +34,9 @@ public class LoginService {
 
     @Autowired
     PasswordResetOtpRepository resetRepository;
+
+    @Autowired
+    EmailService emailService;
 
     public LoginResponse login(LoginRequest loginRequest) {
         Customer customer = customerRepository.findByEmail(loginRequest.getEmail());
@@ -81,9 +85,29 @@ public class LoginService {
                 .otp(UUID.randomUUID())
                 .customerId(customer.getId())
                 .start(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(30))
                 .build();
         log.info("Generating otp {}", otp);
-        resetRepository.save(otp);
+        PasswordResetOtp otpSaved = resetRepository.save(otp);
+        if ( otpSaved != null && otpSaved.getId() != null){
+            emailService.sendOTP(OTPEmail.builder().customerEmail(email).customerName(customer.getFullName()).otp(otpSaved.getOtp().toString()).passwordResetLink("http://localhost:4200/password-reset").build());
+        }
+    }
+
+    public boolean isValid(String email, UUID otp) {
+        Customer customer = customerRepository.findByEmail(email);
+        if ( customer == null || customer.getId() == null){
+            log.error("Customer not found");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Customer not found");
+        }
+        PasswordResetOtp passwordResetOtp = resetRepository.findByCustomerIdAndOtp(customer.getId(), otp);
+        if ( passwordResetOtp == null){
+            return false;
+        }
+        if ( passwordResetOtp.getExpiresAt().isBefore(LocalDateTime.now())){
+            return false;
+        }
+        return true;
     }
 
     public void passwordResetSubmit(PasswordResetSubmit req) {
@@ -92,15 +116,15 @@ public class LoginService {
             log.error("Customer not found");
             throw new ApiException(HttpStatus.BAD_REQUEST, "Customer not found");
         }
-        PasswordResetOtp resetOtp = resetRepository.findByUserId(customer.getId());
-        if ( resetOtp.getOtp().equals(req.getOtp()) ){
+        PasswordResetOtp passwordResetOtp = resetRepository.findByCustomerIdAndOtp(customer.getId(), req.getOtp());
+        if ( passwordResetOtp != null && passwordResetOtp.getExpiresAt().isAfter(LocalDateTime.now())){
             CustomerAccount account = customerAccountRepository.getAccountByUserId(customer.getId());
             account.setPassword(req.getPassword());
             account.setPasswordChanged(LocalDateTime.now());
             customerAccountRepository.save(account);
-            resetRepository.delete(resetOtp);
+            resetRepository.delete(passwordResetOtp);
         }else{
-            throw new ApiException(HttpStatus.BAD_REQUEST, "OTP not found or not matched");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "OTP not found or expired");
         }
     }
 }
