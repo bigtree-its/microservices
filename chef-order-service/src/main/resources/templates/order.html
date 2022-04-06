@@ -160,7 +160,8 @@
         </div>
         <div align="center" class="confirmation-summary">
             <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #4b4848;"> Thanks for your order.
-                We’ll let you know once your order confirmed by your Chef. You will receice another email from us confirming your order.
+                We’ll let you know once your order confirmed by your Chef. You will receice another email from us
+                confirming your order.
                 You can view the status of your order by visiting Your Orders on www.urchef.co.uk
             </p>
         </div>
@@ -171,7 +172,8 @@
         <div>
             <table style="height: 40px;">
                 <tr>
-                    <td style="height: 60px;width:60px;"><img th:src="${chef.image}" width="100%" height="100%" loading="lazy" style="object-fit: cover;"></td>
+                    <td style="height: 60px;width:60px;"><img th:src="${chef.image}" width="100%" height="100%"
+                            loading="lazy" style="object-fit: cover;"></td>
                     <td width="80%" style="padding: 0 10px;">
                         <div>
                             <span style="font-weight: 600;font-size: 20px;" th:utext="${chef.name}"></span><br>
@@ -244,7 +246,7 @@
                     <td width="25% " align="right " class="summary-item-value"> <span th:remove="tag"
                             th:text="${#numbers.formatCurrency(order.packagingFee)}"></span></td>
                 </tr>
-                <tr width="100%" class="summary-item-row" th:if="${order.delivery}">
+                <tr width="100%" class="summary-item-row" th:if="${order.serviceMode == 'DELIVERY'}">
                     <td width="75% " align="left " class="summary-item-name">Delivery Fee</td>
                     <td width="25% " align="right " class="summary-item-value"> <span th:remove="tag"
                             th:text="${#numbers.formatCurrency(order.deliveryFee)}"></span></td>
@@ -267,7 +269,7 @@
             </table>
         </div>
         <hr>
-        <div class="delivery-address-section" th:if="${order.delivery}">
+        <div class="delivery-address-section" th:if="${order.serviceMode == 'DELIVERY'}">
             <p style="font-weight: 800; ">Delivery Address</p>
             <p>
             <div th:if="${customer.address.addressLine1} != null">
@@ -286,14 +288,14 @@
                 <span th:utext="${customer.address.postcode}"></span><br>
             </div>
             </p>
+            <hr>
         </div>
 
-        <div class="delivery-date-section" th:if="${order.delivery}">
-            <hr>
+        <div class="delivery-date-section" th:if="${order.serviceMode == 'DELIVERY'}">
             <span style="font-weight: 800;margin-right: 10px; ">Estimated Delivery</span>: <span
                 th:utext="${#temporals.format(order.expectedDeliveryDate, 'dd MMM yyyy')}"></span>
+            <hr>
         </div>
-        <hr>
         <div class="greetings-section">
             <span>We hope to welcome you back to www.urchef.co.uk soon!</span>
             <p>

@@ -7,12 +7,12 @@ import java.util.*;
 import com.bigtree.chef.orders.error.ApiException;
 import com.bigtree.chef.orders.model.enums.OrderStatus;
 import com.bigtree.chef.orders.model.request.UpdateStatus;
-import com.bigtree.chef.orders.repository.ItemRepository;
 import com.bigtree.chef.orders.repository.OrderRepository;
 import com.bigtree.chef.orders.entity.Order;
 import com.bigtree.chef.orders.entity.OrderItem;
 
-import org.apache.commons.lang3.ArrayUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,7 @@ public class OrderService {
     @Autowired
     PaymentService paymentService;
 
+
     @Transactional
     public Order create(Order order) {
         if (CollectionUtils.isEmpty(order.getItems())){
@@ -46,6 +47,13 @@ public class OrderService {
         Long countByDate = orderRepository.countByOrderCreated(LocalDateTime.now());
         order.setReference(buildOrderReference(countByDate.intValue()));
         order.setStatus(OrderStatus.CREATED);
+        String serviceMode = order.getServiceMode();
+        if ( StringUtils.isEmpty(serviceMode)){
+            serviceMode = "PICKUP";
+        }else{
+            serviceMode = serviceMode.toUpperCase();
+        }
+        order.setServiceMode(serviceMode);
         if (order.getOrderCreated() == null) {
             order.setOrderCreated(LocalDateTime.now());
         }
@@ -55,8 +63,7 @@ public class OrderService {
         try{
             Order saved = orderRepository.save(order);
             if (saved != null) {
-                log.info("Order Created");
-                log.info("{} created for customer {}", saved, saved.getCustomerEmail());
+                log.info("Order created: {}", saved.getId());
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -114,7 +121,6 @@ public class OrderService {
         Optional<Order> findById = orderRepository.findById(id);
         if (findById.isPresent()) {
             Order order = findById.get();
-//            itemRepository.deleteByOrderId(id);
             orderRepository.delete(order);
             return true;
         }

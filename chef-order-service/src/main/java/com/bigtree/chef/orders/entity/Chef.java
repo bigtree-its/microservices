@@ -21,7 +21,7 @@ public class Chef {
     @JsonProperty("image")
     String image;
     @JsonProperty("specials")
-    String specials;
+    String[] specials;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

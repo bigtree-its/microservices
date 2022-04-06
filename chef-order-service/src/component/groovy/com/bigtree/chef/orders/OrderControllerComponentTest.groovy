@@ -74,7 +74,7 @@ class OrderControllerComponentTest extends Specification {
 
     private Order getDummyOrder() {
         Order order = Order.builder()
-                .address(Address.builder().lineNumber1("lineNumber1").lineNumber2("lineNumber2").city("city")
+                .address(Address.builder().addressLine1("addressLine1").addressLine2("addressLine2").city("city")
                         .country("GB").postCode("ABC1234").build())
                 .date(LocalDate.now())
                 .email("customer@email.com")

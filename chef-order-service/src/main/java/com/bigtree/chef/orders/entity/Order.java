@@ -35,6 +35,7 @@ public class Order extends BaseEntity {
 	private String customerMobile;
 	private String reference;
 	private String currency;
+	private String serviceMode;
 	private String paymentReference;
 	private BigDecimal deliveryFee;
 	private BigDecimal packagingFee;
@@ -54,8 +55,7 @@ public class Order extends BaseEntity {
 	private LocalDateTime orderDelivered;
 	private LocalDateTime orderPickedUpByDeliveryPartner;
 	private boolean deleted;
-	private boolean delivery;
-	private boolean pickup;
+
 
 	@Type(type = "jsonb")
 	@Column(columnDefinition = "jsonb")
