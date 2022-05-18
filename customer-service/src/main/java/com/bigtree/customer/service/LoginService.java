@@ -90,7 +90,7 @@ public class LoginService {
         log.info("Generating otp {}", otp);
         PasswordResetOtp otpSaved = resetRepository.save(otp);
         if ( otpSaved != null && otpSaved.getId() != null){
-            emailService.sendOTP(OTPEmail.builder().customerEmail(email).customerName(customer.getFullName()).otp(otpSaved.getOtp().toString()).passwordResetLink("http://localhost:4200/password-reset").build());
+            emailService.sendOTP(OTPEmail.builder().customerEmail(email).customerName(customer.getFullName()).otp(otpSaved.getOtp().toString()).passwordResetLink("http://localhost:4200/reset-password").build());
         }
     }
 

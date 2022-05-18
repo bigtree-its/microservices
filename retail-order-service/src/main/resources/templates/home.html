@@ -227,11 +227,11 @@
                                                         <td align="left " valign="top " style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; ">
                                                             <p style="font-weight: 800; ">Delivery Address</p>
                                                             <p>
-                                                                <div th:if="${order.address.lineNumber1} != null">
-                                                                    <span th:utext="${order.address.lineNumber1}"></span><br>
+                                                                <div th:if="${order.address.addressLine1} != null">
+                                                                    <span th:utext="${order.address.addressLine1}"></span><br>
                                                                 </div>
-                                                                <div th:if="${order.address.lineNumber2} != null">
-                                                                    <span th:utext="${order.address.lineNumber2}"></span><br>
+                                                                <div th:if="${order.address.addressLine2} != null">
+                                                                    <span th:utext="${order.address.addressLine2}"></span><br>
                                                                 </div>
                                                                 <div th:if="${order.address.city} != null">
                                                                     <span th:utext="${order.address.city}"></span><br>

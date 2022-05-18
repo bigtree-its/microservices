@@ -1,0 +1,88 @@
+{
+    "chefId": "19ddeaeb-a097-4815-b222-9558e1bf100c",
+    "referfence": "referfence",
+    "paymentReference": "paytmentReference",
+    "customerEmail": "nava.arul@gmail.com",
+    "customerMobile": "07979191176",
+    "currency": "GBP",
+    "serviceMode": "Pickup",
+    "expectedDeliveryDate": "23/Apr/2018",
+    "expectedPickupDate": "23/Apr/2018",
+    "chef": {
+        "chefId": "19ddeaeb-a097-4815-b222-9558e1bf100c",
+        "name": "Sujata Borker",
+        "image": "https://sd.keepcalms.com/i/keep-calm-and-i-am-the-chef.png",
+        "specials": ["Indian","Chinese"],
+        "address": {
+            "addressLine1": "Main St",
+            "addressLine2": "NY",
+            "city": "Glasgow",
+            "postcode": "G77 5GH",
+            "country": "SCOTLAND",
+            "latitude": 55.7716443,
+            "longitude": -4.314007399999999
+        },
+        "contact": {
+            "telephone": "01416554567",
+            "mobile": "0123456789",
+            "email": "chef@email.com"
+        }
+    },
+    "customer": {
+        "name": "I am Customer",
+        "address": {
+            "addressLine1": "Victoria Street",
+            "addressLine2": "Eagelsham",
+            "city": "Glasgow",
+            "postcode": "G77 5GH",
+            "country": "SCOTLAND",
+            "latitude": 55.7716443,
+            "longitude": -4.314007399999999
+        },
+        "contact": {
+            "telephone": "01416554567",
+            "mobile": "0123456789",
+            "email": "chef@email.com"
+        }
+    },
+    "deliveryFee": 2.00,
+    "packagingFee": 0.50,
+    "saleTax": 2.00,
+    "subTotal": 10.00,
+    "total": 22.50,
+    "items": [
+        {
+            "name": "Fried Rice",
+            "image": "https://www.errenskitchen.com/wp-content/uploads/2019/03/Fried-Rice-square.jpg",
+            "productId": "19ddeaeb-a097-4815-b222-9558e1bf100c",
+            "price": 12.00,
+            "quantity": 2,
+            "subTotal": 24.00,
+            "extras": [
+                {
+                    "name": "Pickle",
+                    "quantity": 1,
+                    "price": 0.50
+                },
+                {
+                    "name": "Salad",
+                    "quantity": 1,
+                    "price": 0.50
+                }
+            ],
+            "choice": {
+                "name": "mutton",
+                "quantity": 1,
+                "price": 0.50
+            }
+        },
+        {
+            "name": "White Rice",
+            "image": "https://www.hookedonheat.com/wp-content/uploads/2020/04/Egg-Fried-Rice-HOHV.jpg",
+            "productId": "19ddeaeb-a097-4815-b222-9558e1bf100c",
+            "price": 12.00,
+            "quantity": 2,
+            "subTotal": 24.00
+        }
+    ]
+}

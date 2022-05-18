@@ -25,7 +25,7 @@ spring:
       location: classpath:db/db.migration
   datasource:
 #    url: jdbc:postgresql://localhost:26257/foodiodb?sslmode=verify-full&applciation_name=transationservice&logServerErrorDetail=falsesocketTimeout=30
-    url: jdbc:postgresql://localhost:26258/openecomm?logServerErrorDetail=false&socketTimeout=30
+    url: jdbc:postgresql://localhost:26257/openecomm?logServerErrorDetail=false&socketTimeout=30
     username: openecommdbuser
     password:
       driver-class-name: org.postgresql.Driver

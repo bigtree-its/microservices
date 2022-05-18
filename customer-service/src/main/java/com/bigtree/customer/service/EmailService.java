@@ -30,7 +30,7 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(otpEmail.getCustomerEmail());
-            helper.setSubject("Your OpenChef account password reset");
+            helper.setSubject("Your one-time passcode");
             helper.setText(mailContentBuilder.build("otp", params), true);
             javaMailSender.send(mimeMessage);
             log.info("Password Reset OTP has been sent to {}", otpEmail.getCustomerEmail());

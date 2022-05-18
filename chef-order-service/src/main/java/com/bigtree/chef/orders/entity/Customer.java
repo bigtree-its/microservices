@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 
 @Data
@@ -15,8 +17,17 @@ import javax.persistence.Column;
 @AllArgsConstructor
 public class Customer {
 
-    @JsonProperty("name")
-    String name;
+    @JsonProperty("firstName")
+    String firstName;
+
+    @JsonProperty("lastName")
+    String lastName;
+
+    @JsonProperty("fullName")
+    String fullName;
+
+    @JsonProperty("id")
+    UUID id;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

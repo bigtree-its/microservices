@@ -73,7 +73,8 @@ public class OrderController {
         if (orders != null) {
             orders.forEach(orderList::add);
         }
-        return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
+        log.info("Found {} orders", orderList.size());
+        return ResponseEntity.ok().body(Orders.builder().orders(orderList).build());
     }
 
     @CrossOrigin(origins = "*")
